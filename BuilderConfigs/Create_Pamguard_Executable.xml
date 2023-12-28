@@ -1,0 +1,441 @@
+<!DOCTYPE project [<!ENTITY libList SYSTEM "tempclasspath.txt"> <!ENTITY propFile SYSTEM "antSettings.txt">]>
+<project default="make_installer" name="Create_installer">
+
+<!-- define the parameters used in the rest of the script -->
+
+        <!-- load the properties from the antSettings file -->
+        &propFile;
+        
+	<property name="workingDir" value="${makingInstallersDir}\WorkingDir\${versionName}" />
+	<property name="buildDir" value="${projectSpace}\bin" />
+	<property name="libDir" value="${projectSpace}\lib" />
+	<property name="lib64Dir" value="${projectSpace}\lib64" />
+	<property name="jarsDir" value="${projectSpace}\bin\jars" />
+	<property name="builderConfigsDir" value="${makingInstallersDir}\BuilderConfigs" />
+	<property name="extraBitsDir" value="${makingInstallersDir}\Extras" />
+	<property name="outputDir" value="${makingInstallersDir}\Installers" />
+	<property name="launch4j.dir" location="${makingInstallersDir}\Tools\launch4jForPamguard" />
+	<property name="innosetupDir" location="${makingInstallersDir}\Tools\Inno_Setup_5" />
+	<property name="iconsDir" value="${makingInstallersDir}\Extras" />
+	<property name="launcherNameMixed32" value="${launcherNameMain32}_MixedMode" />
+	<property name="launcherNameViewer32" value="${launcherNameMain32}_ViewerMode" />
+	<property name="launcherNameDecimus32" value="${launcherNameMain32}_Decimus" />
+	<property name="launcherNameMixed" value="${launcherNameMain}_MixedMode" />
+	<property name="launcherNameViewer" value="${launcherNameMain}_ViewerMode" />
+	<property name="launcherNameDecimus" value="${launcherNameMain}_Decimus" />
+        <property name="JDK1.6.dir" value="${makingInstallersDir}\Tools\jdk1.6.0_30" />
+        <property name="javac1.6" location="${JDK1.6.dir}/bin/javac" />
+
+<!-- define the Launch4J application path.  This is used to create executable wrappers for the jar file, so that the user can run Pamguard -->
+	<taskdef name="launch4j" classname="net.sf.launch4j.ant.Launch4jTask" classpath="${launch4j.dir}/launch4j.jar:${launch4j.dir}/lib/xstream.jar" />
+
+
+<!-- define the Inno Setup application compiler path.  Used to create the self-extracting executable to install the files -->
+        <property name="Run_Inno_Setup_Compiler" location="${innosetupDir}/ISCC.exe"></property>
+
+
+<!-- get the version name from the PamguardVersionInfo class.  This requires the class to have a main method -->
+	<target name="getVersionInfo">
+		<copy todir="${makingInstallersDir}/VNum/PamController">
+			<fileset file="${projectSpace}/src/PamController/PamguardVersionInfo.java" />
+		</copy>
+		<javac executable="${javac1.6}" srcdir="${makingInstallersDir}/VNum" destdir="${makingInstallersDir}/VNum" />
+
+
+		<jar destfile="${makingInstallersDir}/VNum.jar" basedir="${makingInstallersDir}/VNum">
+			<manifest>
+				<attribute name="Main-Class" value="PamController.PamguardVersionInfo" />
+			</manifest>
+		</jar>
+		<java classname="PamController.PamguardVersionInfo" outputproperty="javaVersionOutputString" fork="true">
+			<arg value="" />
+			<classpath>
+				<pathelement location="${makingInstallersDir}/VNum.jar" />
+				<pathelement path="PamController.PamguardVersionInfo" />
+			</classpath>
+		</java>
+                <echo message="installer directory = ${makingInstallersDir}***" />
+                <echo message="javaVersionOutputString = ${javaVersionOutputString}***" />
+		<delete dir="${makingInstallersDir}/VNum" />
+		<delete file="${makingInstallersDir}/VNum.jar" />
+		<script language="javascript">
+			<![CDATA[
+				// getting the value
+				buildnumber = Create_installer.getProperty("javaVersionOutputString");
+				ver = buildnumber.split(":")[3];
+				verPts = ver.split(".");
+				major = verPts[0];
+				//minor = verPts[1];
+				//subRel = verPts[2];
+				//verF = major+"."+minor+"."+subRel;
+				//Create_installer.setProperty("version",verF.replace(".","_"));
+				//Create_installer.setProperty("nsisVersion",verF+".00");
+				Create_installer.setProperty("version",ver.replace(/\./g,"_"));
+				Create_installer.setProperty("nsisVersion",ver+".00");
+				Create_installer.setProperty("majorVersion",major);
+			]]>
+		</script>
+		<property name="installerName" value="Setup-${versionName}_${version}" />
+		<property name="jarFileName" value="${versionName}_${version}.jar" />
+		<echoproperties />
+	</target>
+
+
+<!-- delete old versions of the support files for the ${workingDir} folder -->
+	<target name="clean" depends="getVersionInfo">
+		<echo message="Starting Clean" />
+		<delete file="${workingDir}/${jarFileName}" />
+		<delete file="${workingDir}/README.txt" />
+		<delete file="${workingDir}/README.HTML" />
+		<delete file="${workingDir}/missing_Java.html" />
+		<delete file="${workingDir}/javaOptions32.png" />
+		<delete file="${workingDir}/javaOptions64.png" />		
+		<delete file="${workingDir}/License_GNU_GPL3.txt" />
+		<delete file="${workingDir}/License_GNU_GPL3.html" />
+		<delete file="${workingDir}/WMM.COF" />
+		<delete file="${workingDir}/L4J_Pamguard32.xml" />
+		<delete file="${workingDir}/L4J_Pamguard32_MixedMode.xml" />
+		<delete file="${workingDir}/L4J_Pamguard32_ViewerMode.xml" />
+		<delete file="${workingDir}/L4J_Pamguard32_Decimus.xml" />
+		<delete file="${workingDir}/L4J_Pamguard64.xml" />
+		<delete file="${workingDir}/L4J_Pamguard64_MixedMode.xml" />
+		<delete file="${workingDir}/L4J_Pamguard64_ViewerMode.xml" />
+		<delete file="${workingDir}/L4J_Pamguard64_Decimus.xml" />
+		<delete file="${workingDir}/PamguardSettings.psf" />
+		<delete file="${workingDir}/PamSettingsFiles.psg" />
+		<delete file="${workingDir}/recentDatabase.psg" />
+		<delete dir="${workingDir}/lib" />
+		<delete dir="${workingDir}/lib64" />
+		<delete dir="${workingDir}/jre" />
+		<delete file="${workingDir}/recentDatabase.psg/" />
+		<delete file="${workingDir}/${launcherNameMain}.exe" />
+		<delete file="${workingDir}/${launcherNameMixed}.exe" />
+		<delete file="${workingDir}/${launcherNameViewer}.exe" />
+		<delete file="${workingDir}/${launcherNameDecimus}.exe" />
+		<delete file="${workingDir}/${launcherNameMain}.l4j.ini" />
+		<delete file="${workingDir}/${launcherNameMixed}.l4j.ini" />
+		<delete file="${workingDir}/${launcherNameViewer}.l4j.ini" />
+		<delete file="${workingDir}/${launcherNameDecimus}.l4j.ini" />
+ 		<delete file="${workingDir}/${launcherNameMain32}.exe" />
+		<delete file="${workingDir}/${launcherNameMixed32}.exe" />
+		<delete file="${workingDir}/${launcherNameViewer32}.exe" />
+		<delete file="${workingDir}/${launcherNameDecimus32}.exe" />
+		<delete file="${workingDir}/${launcherNameMain32}.l4j.ini" />
+		<delete file="${workingDir}/${launcherNameMixed32}.l4j.ini" />
+		<delete file="${workingDir}/${launcherNameViewer32}.l4j.ini" />
+		<delete file="${workingDir}/${launcherNameDecimus32}.l4j.ini" />
+                <delete file="${workingDir}/PAMGUARDlogoNew2.ico" />
+                <delete file="${workingDir}/pamguardIconMixedMode2.ico" />
+                <delete file="${workingDir}/pamguardIconViewerMode2.ico" />
+		<delete dir="${workingDir}" />
+		<delete file="${outputDir}/Setup-${versionName}_${version}.exe" />
+	</target>
+
+<!-- Run the java program that gets the library information from .classpath and saves it to the temp file .tempclasspath 
+        <target name="get-classpath-info">
+           <java jar="${makingInstallersDir}/GetClasspathInfo.jar" fork="true" >
+              <arg value="${projectSpace}/.classpath"/>
+           </java>
+        </target>
+-->
+        
+<!-- create the runnable jar file from the source code found in the ${project_space} variable -->
+	<target name="create_runnable_jar" depends="getVersionInfo" description="Make a PAMGUARD runnable jarfile">
+		<echo message="${buildDir} ==>> ${workingDir}/buildDir" />
+		<copydir src="${buildDir}" dest="${workingDir}/buildDir" />
+                
+		<!-- Delete jar folder from working dir so not included twice-->
+		<delete dir="${workingDir}/buildDir/jars" />
+
+
+		<echo message="create_runnable_jar" />
+		<jar destfile="${workingDir}/${jarFileName}" filesetmanifest="mergewithoutmain" excludes="${jarsDir}/**, /**/*.jar">
+			<!-- Is this how the comma seperated list should go?-->
+
+			<manifest>
+				<attribute name="Built-By" value="${user.name}" />
+				<attribute name="Main-Class" value="pamguard.Pamguard" />
+				<attribute name="Class-Path" value="." />
+				<attribute name="SplashScreen-Image" value="Resources/pgBlankSplash.png" />
+			</manifest>
+
+			<!-- Comment out the next section, and read the information in from the .tempclasspath file instead
+			<zipfileset excludes="META-INF/*.SF" src="${jarsDir}/jackson-all-1.9.9.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${jarsDir}/commons-compress-1.6.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${jarsDir}/commons-lang-2.6.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${jarsDir}/commons-logging-1.1.1.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${jarsDir}/commons-math-2.2.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${jarsDir}/commons-math3-3.6.1.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${jarsDir}/WorldWind/gluegen-rt.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${jarsDir}/hsqldb.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${jarsDir}/j3dcore.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${jarsDir}/j3dutils.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${jarsDir}/jackcess-2.1.2.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${jarsDir}/Jama-1.0.2.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${jarsDir}/JAsioHostDG.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${jarsDir}/jflac-1.3-jdk1.4.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${jarsDir}/jhall.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${jarsDir}/jsch-0.1.53.jar" />			
+			<zipfileset excludes="META-INF/*.SF" src="${jarsDir}/WorldWind/jogl.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${jarsDir}/jtransforms-2.3.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${jarsDir}/metadata-extractor-2.6.4.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${jarsDir}/mysql-connector-java-5.1.35-bin.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${jarsDir}/opencsv-2.3.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${jarsDir}/RXTXcomm.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${jarsDir}/sqlite-jdbc-3.8.11.1.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${jarsDir}/ucanaccess-3.0.0.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${jarsDir}/vecmath.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${jarsDir}/Weka.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${jarsDir}/worldwind.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${jarsDir}/worldwindx.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${jarsDir}/x3.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${jarsDir}/xmpcore.jar" />
+			-->
+                        
+                        <!-- run the zipfileset commands from the .tempclasspath file -->
+                        &libList;
+                        
+                        
+			<fileset dir="${workingDir}/buildDir" />
+		</jar>
+		<delete dir="${workingDir}/buildDir" />
+	</target>
+
+
+<!-- create the executable wrappers for the different modes -->
+	<target name="make_exe_wrapper" depends="create_runnable_jar" description="Make Launch4j exe launchers for PAMGUARD">
+		<echo message="make_exe_wrapper" />
+                
+                <!-- create the executable for standard mode 64 bit -->
+		<launch4j>
+			<config headerType="console" errTitle="${versionName}64" outfile="${workingDir}/${launcherNameMain}.exe" customProcName="true" dontWrapJar="true" icon="${iconsDir}/PAMGUARDlogoNew2.ico" jarPath="${jarFileName}" jarFromIni="true" downloadUrl="${downloadUrl}">
+
+				<classPath mainClass="pamguard.Pamguard" classPathFromIni="true">
+					<cp>./</cp>
+				</classPath>
+				<jre minVersion="${javaMinVersion}" maxVersion="${javaMaxVersion}" jdkPreference="preferJre" archRequirement="use64BitJVM">
+				</jre>
+				<versionInfo fileVersion="${nsisVersion}" txtFileVersion="${version}" fileDescription="${launcherNameMain} launcher" copyright="${copyrightText}" productVersion="1.0.0.0" txtProductVersion="${version}" productName="${launcherNameMain}.exe" companyName="SMRU" internalName="filename" originalFilename="${launcherNameMain}.exe">
+				</versionInfo>
+			</config>
+		</launch4j>
+                
+                <!-- create the executable for standard mode 32 bit -->
+		<launch4j>
+			<config headerType="console" errTitle="${versionName}32" outfile="${workingDir}/${launcherNameMain32}.exe" customProcName="true" dontWrapJar="true" icon="${iconsDir}/PAMGUARDlogoNew2.ico" jarPath="${jarFileName}" jarFromIni="true" downloadUrl="${downloadUrl}">
+
+				<classPath mainClass="pamguard.Pamguard" classPathFromIni="true">
+					<cp>./</cp>
+				</classPath>
+				<jre minVersion="${javaMinVersion}" maxVersion="${javaMaxVersion}" jdkPreference="preferJre" archRequirement="use32BitJVM">
+				</jre>
+				<versionInfo fileVersion="${nsisVersion}" txtFileVersion="${version}" fileDescription="${launcherNameMain32} launcher" copyright="${copyrightText}" productVersion="1.0.0.0" txtProductVersion="${version}" productName="${launcherNameMain32}.exe" companyName="SMRU" internalName="filename" originalFilename="${launcherNameMain32}.exe">
+				</versionInfo>
+			</config>
+		</launch4j>
+                
+		<!-- create the executable for mixed mode 64 bit-->
+		<launch4j>
+			<config headerType="console" errTitle="${versionName}64_MixedMode" outfile="${workingDir}/${launcherNameMixed}.exe" customProcName="true" dontWrapJar="true" icon="${iconsDir}/pamguardIconMixedMode2.ico" jarPath="${jarFileName}" jarFromIni="true" downloadUrl="${downloadUrl}">
+
+				<classPath mainClass="pamguard.Pamguard" classPathFromIni="true">
+					<cp>./</cp>
+				</classPath>
+				<jre minVersion="${javaMinVersion}" maxVersion="${javaMaxVersion}" jdkPreference="preferJre" archRequirement="use64BitJVM">
+				</jre>
+				<versionInfo fileVersion="${nsisVersion}" txtFileVersion="${version}" fileDescription="${launcherNameMixed} launcher" copyright="${copyrightText}" productVersion="1.0.0.0" txtProductVersion="${version}" productName="${launcherNameMixed}.exe" companyName="SMRU" internalName="filename" originalFilename="${launcherNameMixed}.exe">
+				</versionInfo>
+			</config>
+		</launch4j>
+                
+		<!-- create the executable for mixed mode 32 bit-->
+		<launch4j>
+			<config headerType="console" errTitle="${versionName}32_MixedMode" outfile="${workingDir}/${launcherNameMixed32}.exe" customProcName="true" dontWrapJar="true" icon="${iconsDir}/pamguardIconMixedMode2.ico" jarPath="${jarFileName}" jarFromIni="true" downloadUrl="${downloadUrl}">
+
+				<classPath mainClass="pamguard.Pamguard" classPathFromIni="true">
+					<cp>./</cp>
+				</classPath>
+				<jre minVersion="${javaMinVersion}" maxVersion="${javaMaxVersion}" jdkPreference="preferJre" archRequirement="use32BitJVM">
+				</jre>
+				<versionInfo fileVersion="${nsisVersion}" txtFileVersion="${version}" fileDescription="${launcherNameMixed32} launcher" copyright="${copyrightText}" productVersion="1.0.0.0" txtProductVersion="${version}" productName="${launcherNameMixed32}.exe" companyName="SMRU" internalName="filename" originalFilename="${launcherNameMixed32}.exe">
+				</versionInfo>
+			</config>
+		</launch4j>
+                
+		<!-- create the executable for viewer mode 64 bit -->
+		<launch4j>
+			<config headerType="console" errTitle="${versionName}64_ViewerMode" outfile="${workingDir}/${launcherNameViewer}.exe" customProcName="true" dontWrapJar="true" icon="${iconsDir}/pamguardIconViewerMode2.ico" jarPath="${jarFileName}" jarFromIni="true" downloadUrl="${downloadUrl}">
+
+				<classPath mainClass="pamguard.Pamguard" classPathFromIni="true">
+					<cp>./</cp>
+				</classPath>
+				<jre minVersion="${javaMinVersion}" maxVersion="${javaMaxVersion}" jdkPreference="preferJre" archRequirement="use64BitJVM">
+				</jre>
+				<versionInfo fileVersion="${nsisVersion}" txtFileVersion="${version}" fileDescription="${launcherNameViewer} launcher" copyright="${copyrightText}" productVersion="1.0.0.0" txtProductVersion="${version}" productName="${launcherNameViewer}.exe" companyName="SMRU" internalName="filename" originalFilename="${launcherNameViewer}.exe">
+				</versionInfo>
+			</config>
+		</launch4j>
+                
+		<!-- create the executable for viewer mode 32 bit -->
+		<launch4j>
+			<config headerType="console" errTitle="${versionName}32_ViewerMode" outfile="${workingDir}/${launcherNameViewer32}.exe" customProcName="true" dontWrapJar="true" icon="${iconsDir}/pamguardIconViewerMode2.ico" jarPath="${jarFileName}" jarFromIni="true" downloadUrl="${downloadUrl}">
+
+				<classPath mainClass="pamguard.Pamguard" classPathFromIni="true">
+					<cp>./</cp>
+				</classPath>
+				<jre minVersion="${javaMinVersion}" maxVersion="${javaMaxVersion}" jdkPreference="preferJre" archRequirement="use32BitJVM">
+				</jre>
+				<versionInfo fileVersion="${nsisVersion}" txtFileVersion="${version}" fileDescription="${launcherNameViewer32} launcher" copyright="${copyrightText}" productVersion="1.0.0.0" txtProductVersion="${version}" productName="${launcherNameViewer32}.exe" companyName="SMRU" internalName="filename" originalFilename="${launcherNameViewer32}.exe">
+				</versionInfo>
+			</config>
+		</launch4j>
+                
+		<!-- create the executable for decimus 64 bit -->
+		<launch4j>
+			<config headerType="console" errTitle="${versionName}64_Decimus" outfile="${workingDir}/${launcherNameDecimus}.exe" customProcName="true" dontWrapJar="true" icon="${iconsDir}/PAMGUARDnetwork.ico" jarPath="${jarFileName}" jarFromIni="true" downloadUrl="${downloadUrl}">
+
+				<classPath mainClass="pamguard.Pamguard" classPathFromIni="true">
+					<cp>./</cp>
+				</classPath>
+				<jre minVersion="${javaMinVersion}" maxVersion="${javaMaxVersion}" jdkPreference="preferJre" archRequirement="use64BitJVM">
+				</jre>
+				<versionInfo fileVersion="${nsisVersion}" txtFileVersion="${version}" fileDescription="${launcherNameDecimus} launcher" copyright="${copyrightText}" productVersion="1.0.0.0" txtProductVersion="${version}" productName="${launcherNameDecimus}.exe" companyName="SMRU" internalName="filename" originalFilename="${launcherNameDecimus}.exe">
+				</versionInfo>
+			</config>
+		</launch4j>
+                
+		<!-- create the executable for decimus 32 bit -->
+		<launch4j>
+			<config headerType="console" errTitle="${versionName}32_Decimus" outfile="${workingDir}/${launcherNameDecimus32}.exe" customProcName="true" dontWrapJar="true" icon="${iconsDir}/PAMGUARDnetwork.ico" jarPath="${jarFileName}" jarFromIni="true" downloadUrl="${downloadUrl}">
+
+				<classPath mainClass="pamguard.Pamguard" classPathFromIni="true">
+					<cp>./</cp>
+				</classPath>
+				<jre minVersion="${javaMinVersion}" maxVersion="${javaMaxVersion}" jdkPreference="preferJre" archRequirement="use32BitJVM">
+				</jre>
+				<versionInfo fileVersion="${nsisVersion}" txtFileVersion="${version}" fileDescription="${launcherNameDecimus32} launcher" copyright="${copyrightText}" productVersion="1.0.0.0" txtProductVersion="${version}" productName="${launcherNameDecimus32}.exe" companyName="SMRU" internalName="filename" originalFilename="${launcherNameDecimus32}.exe">
+				</versionInfo>
+			</config>
+		</launch4j>
+		
+                <!-- add the java heap size switch and create all 3 ini files -->
+		<echo file="${workingDir}/${launcherNameMain}.l4j.ini" append="false">-Xms${javaInitialHeap64}m${line.separator}</echo>
+		<echo file="${workingDir}/${launcherNameMain}.l4j.ini" append="true">-Xmx${javaMaxHeap64}m${line.separator}</echo>
+		<copy file="${workingDir}/${launcherNameMain}.l4j.ini" tofile="${workingDir}/${launcherNameMixed}.l4j.ini"></copy>
+		<copy file="${workingDir}/${launcherNameMain}.l4j.ini" tofile="${workingDir}/${launcherNameViewer}.l4j.ini"></copy>
+		<copy file="${workingDir}/${launcherNameMain}.l4j.ini" tofile="${workingDir}/${launcherNameDecimus}.l4j.ini"></copy>
+		<echo file="${workingDir}/${launcherNameMain32}.l4j.ini" append="false">-Xms${javaInitialHeap32}m${line.separator}</echo>
+		<echo file="${workingDir}/${launcherNameMain32}.l4j.ini" append="true">-Xmx${javaMaxHeap32}m${line.separator}</echo>
+		<copy file="${workingDir}/${launcherNameMain32}.l4j.ini" tofile="${workingDir}/${launcherNameMixed32}.l4j.ini"></copy>
+		<copy file="${workingDir}/${launcherNameMain32}.l4j.ini" tofile="${workingDir}/${launcherNameViewer32}.l4j.ini"></copy>
+		<copy file="${workingDir}/${launcherNameMain32}.l4j.ini" tofile="${workingDir}/${launcherNameDecimus32}.l4j.ini"></copy>
+	</target>
+
+
+<!-- copy all the support files to the workingDir folder -->
+	<target name="make_installer" depends="make_exe_wrapper" description="Make a Windows Installer for PAMGUARD">
+		<echo message="make_installer" />
+		<echoproperties />
+		<copy todir="${workingDir}">
+			<fileset file="${projectSpace}/README.html" />
+		</copy>
+		<copy todir="${workingDir}">
+			<fileset file="${projectSpace}/missing_Java.html" />
+		</copy>
+		<copy todir="${workingDir}">
+			<fileset file="${projectSpace}/javaOptions32.PNG" />
+		</copy>
+		<copy todir="${workingDir}">
+			<fileset file="${projectSpace}/javaOptions64.PNG" />
+		</copy>
+		<copy todir="${workingDir}">
+			<fileset file="${projectSpace}/License_GNU_GPL3.txt" />
+		</copy>
+		<copy todir="${workingDir}">
+			<fileset file="${projectSpace}/License_GNU_GPL3.html" />
+		</copy>
+		<copy todir="${workingDir}">
+			<fileset file="${projectSpace}/WMM.COF" />
+		</copy>
+		<copy todir="${workingDir}">
+			<fileset file="${projectSpace}/msvcr100.dll" />
+		</copy>
+		<copy todir="${workingDir}">
+			<fileset file="${projectSpace}/vcruntime140.dll" />
+		</copy>
+		<copy todir="${workingDir}/lib">
+			<fileset dir="${libDir}" />
+		</copy>
+		<copy todir="${workingDir}/lib64">
+			<fileset dir="${lib64Dir}" />
+		</copy>
+                
+                <!-- got rid of these psfs, they haven't been here for awhile and are avail on the website anyway
+		<copy todir="${workingDir}/LikelihoodDetectorConfigurationFiles">
+			<fileset dir="${workspace}/LikelihoodDetectorConfigurationFiles" />
+		</copy>
+		<copy todir="${workingDir}">
+			<fileset file="${workspace}/Porpoise.psf" />
+		</copy>
+		<copy todir="${workingDir}">
+			<fileset file="${workspace}/SpermWhales.psf" />
+		</copy>
+		<copy todir="${workingDir}">
+			<fileset file="${workspace}/SpermWhalesAndWhistles.psf" />
+		</copy>
+                -->
+		<copy todir="${workingDir}/LikelihoodDetectorConfigurationFiles">
+			<fileset dir="${extraBitsDir}/LikelihoodDetectorConfigurationFiles" />
+		</copy>
+		<copy todir="${workingDir}">
+			<fileset file="${projectSpace}/BlankAccess._accdb" />
+		</copy>
+		<copy todir="${workingDir}">
+			<fileset file="${projectSpace}/BlankOOo._odb" />
+		</copy>
+		<copy todir="${workingDir}">
+			<fileset file="${extraBitsDir}/PAMGUARDlogoNew2.ico" />
+		</copy>
+		<copy todir="${workingDir}">
+			<fileset file="${extraBitsDir}/pamguardIconMixedMode2.ico" />
+		</copy>
+		<copy todir="${workingDir}">
+			<fileset file="${extraBitsDir}/pamguardIconViewerMode2.ico" />
+		</copy>
+		<copy todir="${workingDir}">
+			<fileset file="${extraBitsDir}/PAMGUARDnetwork.ico" />
+		</copy>
+
+
+
+<!--  Run Inno Setup to create a self-extracting executable.  Pass parameters to the compiler so that it knows
+      the name of the program, the executable wrappers, the license file, etc. -->
+                <exec executable="${Run_Inno_Setup_Compiler}">
+                  <arg value="${builderConfigsDir}/Pamguard_createExec.iss"/>
+                  <arg value="/DMyAppVersion=${version}"/>
+                  <arg value="/DMyAppName=${versionName}"/>
+                  <arg value="/DISSI_Splash=${extraBitsDir}/PamguardInstallerSplash.bmp"/>
+                  <arg value="/DISSI_IncludePath=${innosetupDir}/ISSI"/>
+                  <!-- <arg value="/DMyVersionInfo=${nsisVersion}"/>  - removed - never used anywhere anyway, and had problems when letters were included in the version number -->
+		  <arg value="/DmajorVersion=${majorVersion}"/>
+  	          <arg value="/DlauncherNameMain=${launcherNameMain}"/>
+  	          <arg value="/DlauncherNameMixed=${launcherNameMixed}"/>
+  	          <arg value="/DlauncherNameViewer=${launcherNameViewer}"/>
+  	          <arg value="/DlauncherNameDecimus=${launcherNameDecimus}"/>
+  	          <arg value="/DlauncherNameMain32=${launcherNameMain32}"/>
+  	          <arg value="/DlauncherNameMixed32=${launcherNameMixed32}"/>
+  	          <arg value="/DlauncherNameViewer32=${launcherNameViewer32}"/>
+  	          <arg value="/DlauncherNameDecimus32=${launcherNameDecimus32}"/>
+                  <arg value="/DsourceDir=${workingDir}"/>
+                  <arg value="/DoutputDir=${outputDir}"/>
+                  <arg value="/DinstallerName=${installerName}"/>
+                  <arg value="/DlicenseFilename=${workingDir}\License_GNU_GPL3.txt"/>
+                  <arg value="/DsetupIcon=${iconsDir}\PAMGUARDlogoNew2.ico"/>
+                  <arg value="/DjarFilename=${jarFileName}"/>
+		  <arg value="/DjavaMinVersion=${javaMinVersion}"/>
+		  <arg value="/DbundleJRE=0"/>
+		  <arg value="/Ddecimus=${decimusOption}"/>
+              </exec>
+	</target>
+</project>
+

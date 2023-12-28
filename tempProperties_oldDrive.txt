@@ -1,0 +1,15 @@
+PamguardBeta
+12.0.2
+13.0.1
+missing_Java.html
+384
+960
+2048
+4096
+C:\Users\mo55\workspace\PamguardCompiler
+D:\Work\EclipseWorkspace\UID Java 12
+PamguardBeta
+Released under the GPL Version 3
+0
+1
+0

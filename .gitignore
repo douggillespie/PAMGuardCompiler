@@ -19,6 +19,19 @@
 *.tar.gz
 *.rar
 
+# a lot of tools from 3rd parties that we won't want to distribute #
+Tools/apache-ant-1.8.2/
+Tools/Inno_Setup_5/
+Tools/jdk1.6.0_30/
+Tools/jhelpdev-0.63/
+Tools/JRE12Plus/
+AdminCorruption/
+WorkingDir/
+Installers/
+bin/
+WorkingDir/
+
+
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*

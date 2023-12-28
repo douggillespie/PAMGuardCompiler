@@ -1,0 +1,16 @@
+Pamguard
+16.0.0
+17.9.9
+http://java.com/en/download/manual.jsp
+384
+960
+2048
+4096
+C:\Users\dg50\eclipse-workspaces\PAMGuardDev\PamguardCompiler
+C:\Users\dg50\source\repos\PAMGuardPAMGuard
+Pamguard
+Released under the GPL Version 3
+0
+1
+1
+0

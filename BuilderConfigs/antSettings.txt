@@ -1,0 +1,16 @@
+<property name="versionName" value="Pamguard" />
+<property name="javaMinVersion" value="16.0.0" />
+<property name="javaMaxVersion" value="21.9.9" />
+<property name="downloadUrl" value="http://java.com/en/download/manual.jsp" />
+<property name="javaInitialHeap32" value="384" />
+<property name="javaMaxHeap32" value="960" />
+<property name="javaInitialHeap64" value="2048" />
+<property name="javaMaxHeap64" value="4096" />
+<property name="makingInstallersDir" value="C:\Users\dg50\eclipse-workspaces\PAMGuardDev\PamguardCompiler" />
+<property name="projectSpace" value="C:\Users\dg50\source\repos\PAMGuardDG" />
+<property name="launcherNameMain" value="Pamguard" />
+<property name="jarFileName" value="Pamguard-2.02.09f.jar" />
+<property name="dogFileName" value="PamDog_1_12.jar" />
+<property name="launcherNameMain32" value="Pamguard32" />
+<property name="copyrightText" value="Released under the GPL Version 3" />
+<property name="decimusOption" value="0" />
