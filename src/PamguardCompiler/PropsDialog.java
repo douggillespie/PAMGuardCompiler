@@ -178,7 +178,7 @@ public class PropsDialog extends JFrame implements ActionListener {
 				+ "in the pom.xml file matches the version number in PamguardVersionInfo!</html>");
 		pamDogJarButon = new JButton("PAMDog JAR file");
 		pamDogJarButon.addActionListener(this);
-		pamDogFilenameTxt = new JTextField(20);
+		pamDogFilenameTxt = new JTextField(40);
 		pamDogFilenameTxt.setEditable(false);
 		String dogTip = "PAMDog jar should be copied to same folder as main PAMGUard jar file for MAven build";
 		pamDogJarButon.setToolTipText(dogTip);

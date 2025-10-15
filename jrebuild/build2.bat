@@ -1,0 +1,3 @@
+SET PATH="C:\Program Files\Java\jdk-25\bin";%PATH%
+SET PGEXE="C:\PamguardCode2021\PamGuard NOAA2\target\PamguardBeta-2.01.0601.jar"
+jlink --no-header-files --no-man-pages --module-path "C:\Program Files\JavaFX\javafx-sdk-16\lib" --add-modules java.base,java.compiler,java.datatransfer,java.desktop,java.instrument,java.logging,java.management,java.naming,java.net.http,java.net.http,java.prefs,java.rmi,java.scripting,java.security.jgss,java.security.sasl,java.sql,java.transaction.xa,java.xml,java.xml.crypto,jdk.crypto.ec,jdk.jfr,jdk.jsobject,jdk.unsupported,jdk.unsupported.desktop,jdk.xml.dom --output Java25MavenJRE

@@ -25,6 +25,10 @@ Tools/Inno_Setup_5/
 Tools/jdk1.6.0_30/
 Tools/jhelpdev-0.63/
 Tools/JRE12Plus/
+Tools/JRE12Plus2021/
+Tools/JRE12PlusJRE21/
+jrebuild/Java25MavenJRE/
+jrebuild/Java16MavenJRE/
 AdminCorruption/
 WorkingDir/
 Installers/
