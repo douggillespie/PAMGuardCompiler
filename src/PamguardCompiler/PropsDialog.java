@@ -818,6 +818,9 @@ public class PropsDialog extends JFrame implements ActionListener {
 //		Path antBuilder = Paths.get(p.toString(), "Create_Pamguard_Executable.xml");
 		File antBuilder;
 		if (useMaven.isSelected()) {
+			/**
+			 * Only this one is used, all other options can be removed. 
+			 */
 			antBuilder = new File(builderDir, "Create_Pamguard_Executable_withMaven.xml");
 		} else if (useJava12.isSelected()) {
 				antBuilder = new File(builderDir, "Create_Pamguard_Executable_withJDK12.xml");
