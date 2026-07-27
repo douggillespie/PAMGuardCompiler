@@ -293,20 +293,6 @@
 			</config>
 		</launch4j>
 
-		<!-- create the executable for decimus 32 bit -->
-		<launch4j>
-			<config headerType="console" errTitle="${versionName}32_Decimus" outfile="${workingDir}/${launcherNameDecimus32}.exe" customProcName="true" dontWrapJar="true" icon="${iconsDir}/PAMGUARDnetwork.ico" jarPath="${jarFileName}" jarFromIni="true" downloadUrl="${downloadUrl}">
-
-				<classPath mainClass="pamguard.Pamguard" classPathFromIni="true">
-					<cp>./</cp>
-				</classPath>
-				<jre path="./jre32" minVersion="${javaMinVersion}" maxVersion="${javaMaxVersion}" jdkPreference="preferJre" archRequirement="use32BitJVM">
-				</jre>
-				<versionInfo fileVersion="${nsisVersion}" txtFileVersion="${version}" fileDescription="${launcherNameDecimus32} launcher" copyright="${copyrightText}" productVersion="1.0.0.0" txtProductVersion="${version}" productName="${launcherNameDecimus32}.exe" companyName="SMRU" internalName="filename" originalFilename="${launcherNameDecimus32}.exe">
-				</versionInfo>
-			</config>
-		</launch4j>
-
 		<!-- create the executable for standard mode 64 bit version of PAMDog -->
 		<launch4j>
 			<config headerType="gui" errTitle="${versionName}64" outfile="${workingDir}/${launcherNamePamDog}.exe" customProcName="true" dontWrapJar="true" icon="${iconsDir}/PAMGUARDlogoNew2.ico" jarPath="${dogFileName}" jarFromIni="true" downloadUrl="${downloadUrl}">

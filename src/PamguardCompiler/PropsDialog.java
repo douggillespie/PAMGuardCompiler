@@ -113,11 +113,11 @@ public class PropsDialog extends JFrame implements ActionListener {
 	private JTextField versionName;
 	private JTextField javaMinVersion;
 	private JTextField javaMaxVersion;
-	private JTextField downloadUrl;
+//	private JTextField downloadUrl;
 	private JTextField javaInitialHeap64;
 	private JTextField javaMaxHeap64;
-	private JTextField javaInitialHeap32;
-	private JTextField javaMaxHeap32;
+//	private JTextField javaInitialHeap32;
+//	private JTextField javaMaxHeap32;
 	private JTextField installersDirTxt;
 	private JTextField projectSpaceTxt;
 	private JTextField launcherNameMain;
@@ -133,10 +133,10 @@ public class PropsDialog extends JFrame implements ActionListener {
 	 */
 	private String serDataFileName = "PAMGuardCompilerSettings.ser";
 	private String antSettingsFilename = "antSettings.txt";
-	private JCheckBox bundleJRE;
-	private JCheckBox useJava12;
+//	private JCheckBox bundleJRE;
+//	private JCheckBox useJava12;
 	private JCheckBox decimusOption;
-	private JCheckBox mavenOption;
+//	private JCheckBox mavenOption;
 	private JButton jarFilenameButton;
 	private JTextField jarFilenameTxt;
 	private JButton pamDogJarButon;
@@ -262,26 +262,11 @@ public class PropsDialog extends JFrame implements ActionListener {
 		javaMinVersion = new JTextField(30);
 		JLabel javaMaxVersionLbl = new JLabel("Maximum Java Version");
 		javaMaxVersion = new JTextField(30);
-		JLabel downloadUrlLbl = new JLabel("Java download URL");
-		downloadUrl = new JTextField(30);
-		JLabel javaInitialHeapLbl32 = new JLabel("Java Initial Heap Size (32 bit)");
-		javaInitialHeap32 = new JTextField(30);
-		JLabel javaMaxHeapLbl32 = new JLabel("Java Max Heap Size (32 bit)");
-		javaMaxHeap32= new JTextField(30);
 		JLabel javaInitialHeapLbl64 = new JLabel("Java Initial Heap Size (64 bit)");
 		javaInitialHeap64 = new JTextField(30);
 		JLabel javaMaxHeapLbl64 = new JLabel("Java Max Heap Size (64 bit)");
 		javaMaxHeap64= new JTextField(30);
-		JLabel bundleJRELbl = new JLabel("Bundle JRE 1.8.0_201 with Installer");
-		bundleJRELbl.setToolTipText("If checked, will bundle 32 and 64 bit versions of Java JRE 1.8.0_201 with the installer");
-		bundleJRE = new JCheckBox();
-		bundleJRE.setToolTipText("If checked, will bundle 32 and 64 bit versions of Java JRE 1.8.0_201 with the installer");
-		bundleJRE.addActionListener(this);
-		JLabel useJava12Lbl = new JLabel("Bundle JRE 12+ with Installer");
-		useJava12Lbl.setToolTipText("If checked, will bundle 64 bit version of Java JRE 12 (or newer) with the installer");
-		useJava12 = new JCheckBox();
-		useJava12.setToolTipText("If checked, will bundle 64 bit version of Java JRE 12 (or newer) with the installer");
-		useJava12.addActionListener(this);
+		
 		JLabel useMavenLbl = new JLabel("This is a Maven project");
 		useMavenLbl.setToolTipText("If checked, will bundle the jar file specified above instead of trying to compile a new jar");
 		useMaven = new JCheckBox();
@@ -302,27 +287,14 @@ public class PropsDialog extends JFrame implements ActionListener {
         		.addGroup(javaSubPanelLayout.createSequentialGroup()
         				.addComponent(javaMaxVersionLbl)
         				.addComponent(javaMaxVersion))
-        		.addGroup(javaSubPanelLayout.createSequentialGroup()
-        				.addComponent(downloadUrlLbl)
-        				.addComponent(downloadUrl))
-        		.addGroup(javaSubPanelLayout.createSequentialGroup()
-        				.addComponent(javaInitialHeapLbl32)
-        				.addComponent(javaInitialHeap32))
-        		.addGroup(javaSubPanelLayout.createSequentialGroup()
-        				.addComponent(javaMaxHeapLbl32)
-        				.addComponent(javaMaxHeap32))
+        	
         		.addGroup(javaSubPanelLayout.createSequentialGroup()
         				.addComponent(javaInitialHeapLbl64)
         				.addComponent(javaInitialHeap64))
         		.addGroup(javaSubPanelLayout.createSequentialGroup()
         				.addComponent(javaMaxHeapLbl64)
         				.addComponent(javaMaxHeap64))
-        		.addGroup(javaSubPanelLayout.createSequentialGroup()
-        				.addComponent(bundleJRELbl)
-        				.addComponent(bundleJRE))
-        		.addGroup(javaSubPanelLayout.createSequentialGroup()
-        				.addComponent(useJava12Lbl)
-        				.addComponent(useJava12))
+    
         		.addGroup(javaSubPanelLayout.createSequentialGroup()
         				.addComponent(useMavenLbl)
         				.addComponent(useMaven))
@@ -338,27 +310,14 @@ public class PropsDialog extends JFrame implements ActionListener {
         		.addGroup(javaSubPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
         				.addComponent(javaMaxVersionLbl)
         				.addComponent(javaMaxVersion))
-        		.addGroup(javaSubPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-        				.addComponent(downloadUrlLbl)
-        				.addComponent(downloadUrl))
-        		.addGroup(javaSubPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-        				.addComponent(javaInitialHeapLbl32)
-        				.addComponent(javaInitialHeap32))
-        		.addGroup(javaSubPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-        				.addComponent(javaMaxHeapLbl32)
-        				.addComponent(javaMaxHeap32))
+        		
         		.addGroup(javaSubPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
         				.addComponent(javaInitialHeapLbl64)
         				.addComponent(javaInitialHeap64))
         		.addGroup(javaSubPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
         				.addComponent(javaMaxHeapLbl64)
         				.addComponent(javaMaxHeap64))
-        		.addGroup(javaSubPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-        				.addComponent(bundleJRELbl)
-        				.addComponent(bundleJRE))
-        		.addGroup(javaSubPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-        				.addComponent(useJava12Lbl)
-        				.addComponent(useJava12))
+        		
         		.addGroup(javaSubPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
         				.addComponent(useMavenLbl)
         				.addComponent(useMaven))
@@ -368,12 +327,8 @@ public class PropsDialog extends JFrame implements ActionListener {
         		);
         javaSubPanelLayout.linkSize(SwingConstants.HORIZONTAL, javaMinVersionLbl,
         		javaMaxVersionLbl, 
-        		downloadUrlLbl,
         		javaInitialHeapLbl64,
         		javaMaxHeapLbl64,
-        		javaInitialHeapLbl32,
-        		javaMaxHeapLbl32,
-        		bundleJRELbl,
         		decimusOptionLbl);
 
 		// add subframes to main frame
@@ -458,14 +413,6 @@ public class PropsDialog extends JFrame implements ActionListener {
         } else if (e.getSource() == cancelButton) {
         	frame.dispose();
         	System.exit(0);
-        } else if (e.getSource() == bundleJRE) {
-        	if (bundleJRE.isSelected()) {
-        		useJava12.setSelected(false);
-        	}
-        } else if (e.getSource() == useJava12) {
-        	if (useJava12.isSelected()) {
-        		bundleJRE.setSelected(false);
-        	}
         } else if (e.getSource() == useMaven) {
         	jarFilenameButton.setEnabled(useMaven.isSelected());
         	jarFilenameTxt.setEnabled(useMaven.isSelected());
@@ -523,17 +470,12 @@ public class PropsDialog extends JFrame implements ActionListener {
 		versionName.setText(props.getVersionName());
 		javaMinVersion.setText(props.getJavaMinVersion());
 		javaMaxVersion.setText(props.getJavaMaxVersion());
-		downloadUrl.setText(props.getDownloadUrl());
-		javaInitialHeap32.setText(props.getJavaInitialHeap32());
-		javaMaxHeap32.setText(props.getJavaMaxHeap32());
 		javaInitialHeap64.setText(props.getJavaInitialHeap64());
 		javaMaxHeap64.setText(props.getJavaMaxHeap64());
 		installersDirTxt.setText(props.getMakingInstallersDir());
 		projectSpaceTxt.setText(props.getProjectSpace());
 		launcherNameMain.setText(props.getLauncherNameMain());
 		copyrightText.setText(props.getCopyrightText());
-		bundleJRE.setSelected(props.isBundleJRE());
-		useJava12.setSelected(props.isUseJava12());
 		useMaven.setSelected(props.isUseMaven());
 		decimusOption.setSelected(props.isDecimusOption());
 		jarFilenameTxt.setText(props.getJarFileName());
@@ -549,17 +491,12 @@ public class PropsDialog extends JFrame implements ActionListener {
 		props.setVersionName(versionName.getText());
 		props.setJavaMinVersion(javaMinVersion.getText());
 		props.setJavaMaxVersion(javaMaxVersion.getText());
-		props.setDownloadUrl(downloadUrl.getText());
-		props.setJavaInitialHeap32(javaInitialHeap32.getText());
-		props.setJavaMaxHeap32(javaMaxHeap32.getText());
 		props.setJavaInitialHeap64(javaInitialHeap64.getText());
 		props.setJavaMaxHeap64(javaMaxHeap64.getText());
 		props.setMakingInstallersDir(installersDirTxt.getText());
 		props.setProjectSpace(projectSpaceTxt.getText());
 		props.setLauncherNameMain(launcherNameMain.getText());
 		props.setCopyrightText(copyrightText.getText());
-		props.setBundleJRE(bundleJRE.isSelected());
-		props.setUseJava12(useJava12.isSelected());
 		props.setUseMaven(useMaven.isSelected());
 		props.setDecimusOption(decimusOption.isSelected());
 		props.setJarFileName(jarFilenameTxt.getText());
@@ -579,53 +516,7 @@ public class PropsDialog extends JFrame implements ActionListener {
 		}
 		
 	}
-	/**
-	 * Save the current parameters to the temp file
-	 */
-	@Deprecated
-	public void saveParamsToFileTxt() {
-		try {
-//			FileOutputStream fos = new FileOutputStream(new File(props.getMakingInstallersDir(), outputFilename));
-			FileOutputStream fos = new FileOutputStream(new File(System.getProperty("user.dir"), outputFilename));
-			OutputStreamWriter osw = new OutputStreamWriter(fos, "utf-8");
-			Writer writer = new BufferedWriter(osw);
-			writer.write(props.getVersionName() + "\r\n");
-			writer.write(props.getJavaMinVersion() + "\r\n");
-			writer.write(props.getJavaMaxVersion() + "\r\n");
-			writer.write(props.getDownloadUrl() + "\r\n");
-			writer.write(props.getJavaInitialHeap32() + "\r\n");
-			writer.write(props.getJavaMaxHeap32() + "\r\n");
-			writer.write(props.getJavaInitialHeap64() + "\r\n");
-			writer.write(props.getJavaMaxHeap64() + "\r\n");
-			writer.write(props.getMakingInstallersDir() + "\r\n");
-			writer.write(props.getProjectSpace() + "\r\n");
-			writer.write(props.getLauncherNameMain() + "\r\n");
-			writer.write(props.getCopyrightText() + "\r\n");
-			if (props.isBundleJRE()) {
-				writer.write("1\r\n");
-			} else {
-				writer.write("0\r\n");
-			}
-			if (props.isUseJava12()) {
-				writer.write("1\r\n");
-			} else {
-				writer.write("0\r\n");
-			}
-			if (props.isUseMaven()) {
-				writer.write("1\r\n");
-			} else {
-				writer.write("0\r\n");
-			}
-			if (props.isDecimusOption()) {
-				writer.write("1\r\n");
-			} else {
-				writer.write("0\r\n");
-			}
-			writer.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}	
-	}
+	
 
 	public boolean loadParamsFromFile() {
 //		File outputFile = new File(props.getMakingInstallersDir(), outputFilename);
@@ -645,64 +536,7 @@ public class PropsDialog extends JFrame implements ActionListener {
 		return true;
 	}
 
-	/**
-	 * Load parameters from the temp file
-	 * 
-	 * @return true if successful
-	 */
-	@Deprecated
-	public boolean loadParamsFromTxtFile() {
-//		File outputFile = new File(props.getMakingInstallersDir(), outputFilename);
-		File outputFile = new File(System.getProperty("user.dir"), outputFilename);
-		if (!outputFile.exists()) {
-			return false;
-		}
-		try {
-			BufferedReader br = new BufferedReader(new FileReader(outputFile));
-			props.setVersionName(br.readLine());
-			props.setJavaMinVersion(br.readLine());
-			props.setJavaMaxVersion(br.readLine());
-			props.setDownloadUrl(br.readLine());
-			props.setJavaInitialHeap32(br.readLine());
-			props.setJavaMaxHeap32(br.readLine());
-			props.setJavaInitialHeap64(br.readLine());
-			props.setJavaMaxHeap64(br.readLine());
-			props.setMakingInstallersDir(br.readLine());
-			props.setProjectSpace(br.readLine());
-			props.setLauncherNameMain(br.readLine());
-			props.setCopyrightText(br.readLine());
-			String bundle = br.readLine();
-			if (bundle == null || bundle.equals("0")) {
-				props.setBundleJRE(false);
-			} else {
-				props.setBundleJRE(true);
-			}
-			bundle = br.readLine();
-			if (bundle == null || bundle.equals("0")) {
-				props.setUseJava12(false);
-			} else {
-				props.setUseJava12(true);
-			}
-			bundle = br.readLine();
-			if (bundle == null || bundle.equals("0")) {
-				props.setUseMaven(false);
-			} else {
-				props.setUseMaven(true);
-			}
-			bundle = br.readLine();
-			if (bundle == null || bundle.equals("0")) {
-				props.setDecimusOption(false);
-			} else {
-				props.setDecimusOption(true);
-			}
-			br.close();
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-	}
+	
 	
 	/**
 	 * Generate the settings file that the ANT build will read in as properties.
@@ -717,18 +551,11 @@ public class PropsDialog extends JFrame implements ActionListener {
 			writer.write("<property name=\"versionName\" value=\"" + props.getVersionName() + "\" />\r\n");
 			writer.write("<property name=\"javaMinVersion\" value=\"" + props.getJavaMinVersion() + "\" />\r\n");
 			writer.write("<property name=\"javaMaxVersion\" value=\"" + props.getJavaMaxVersion() + "\" />\r\n");
-			writer.write("<property name=\"downloadUrl\" value=\"" + props.getDownloadUrl() + "\" />\r\n");
-			writer.write("<property name=\"javaInitialHeap32\" value=\"" + props.getJavaInitialHeap32() + "\" />\r\n");
-			writer.write("<property name=\"javaMaxHeap32\" value=\"" + props.getJavaMaxHeap32() + "\" />\r\n");
 			writer.write("<property name=\"javaInitialHeap64\" value=\"" + props.getJavaInitialHeap64() + "\" />\r\n");
 			writer.write("<property name=\"javaMaxHeap64\" value=\"" + props.getJavaMaxHeap64() + "\" />\r\n");
 			writer.write("<property name=\"makingInstallersDir\" value=\"" + props.getMakingInstallersDir() + "\" />\r\n");
 			writer.write("<property name=\"projectSpace\" value=\"" + props.getProjectSpace() + "\" />\r\n");
-			if (props.isUseJava12()) {
-				writer.write("<property name=\"launcherNameMain\" value=\"" + props.getLauncherNameMain() + "\" />\r\n");
-			} else {
 				writer.write("<property name=\"launcherNameMain\" value=\"" + props.getLauncherNameMain() + "64\" />\r\n");
-			}
 			if (props.isUseMaven()) {
 				writer.write("<property name=\"jarFileName\" value=\"" + jarFilenameTxt.getText() + "\" />\r\n");
 			}
@@ -817,18 +644,18 @@ public class PropsDialog extends JFrame implements ActionListener {
 		// run the ANT build
 //		Path antBuilder = Paths.get(p.toString(), "Create_Pamguard_Executable.xml");
 		File antBuilder;
-		if (useMaven.isSelected()) {
+//		if (useMaven.isSelected()) {
 			/**
 			 * Only this one is used, all other options can be removed. 
 			 */
 			antBuilder = new File(builderDir, "Create_Pamguard_Executable_withMaven.xml");
-		} else if (useJava12.isSelected()) {
-				antBuilder = new File(builderDir, "Create_Pamguard_Executable_withJDK12.xml");
-		} else if (bundleJRE.isSelected()) {
-			antBuilder = new File(builderDir, "Create_Pamguard_Executable_withJRE.xml");
-		} else {
-			antBuilder = new File(builderDir, "Create_Pamguard_Executable.xml");
-		}
+//		} else if (useJava12.isSelected()) {
+//				antBuilder = new File(builderDir, "Create_Pamguard_Executable_withJDK12.xml");
+//		} else if (bundleJRE.isSelected()) {
+//			antBuilder = new File(builderDir, "Create_Pamguard_Executable_withJRE.xml");
+//		} else {
+//			antBuilder = new File(builderDir, "Create_Pamguard_Executable.xml");
+//		}
 		this.executeAntTask(antBuilder.toString(), "clean");
 		this.executeAntTask(antBuilder.toString(), "make_installer");
 		

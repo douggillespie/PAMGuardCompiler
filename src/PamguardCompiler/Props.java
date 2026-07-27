@@ -39,17 +39,12 @@ public class Props implements Serializable {
 	private String versionName = "PamguardBeta";
 	private String javaMinVersion = "1.7.0";
 	private String javaMaxVersion = "1.8.0_300";
-	private String downloadUrl = "http://java.com/en/download/manual.jsp";
 	private String javaInitialHeap64 = "960";
 	private String javaMaxHeap64 = "2048";
-	private String javaInitialHeap32 = "384";
-	private String javaMaxHeap32 = "960";
 	private String makingInstallersDir = "D:/Work/EclipseWorkspace/PamguardCompiler";
 	private String projectSpace = "D:/Work/EclipseWorkspace/Pamguard_SMRU";
 	private String launcherNameMain = "PamguardBeta";
 	private String copyrightText = "Released under the GPL Version 3";
-	private boolean bundleJRE = false;
-	private boolean useJava12 = false;
 	private boolean decimusOption = false;
 	private String jarFileName = "PamguardBeta-2.01.05b.jar";
 	private boolean useMaven = false;
@@ -61,18 +56,6 @@ public class Props implements Serializable {
 	}
 	public void setDecimusOption(boolean decimusOption) {
 		this.decimusOption = decimusOption;
-	}
-	public boolean isBundleJRE() {
-		return bundleJRE;
-	}
-	public void setBundleJRE(boolean bundleJRE) {
-		this.bundleJRE = bundleJRE;
-	}
-	public boolean isUseJava12() {
-		return useJava12;
-	}
-	public void setUseJava12(boolean useJava12) {
-		this.useJava12 = useJava12;
 	}
 	public String getVersionName() {
 		return versionName;
@@ -91,12 +74,6 @@ public class Props implements Serializable {
 	}
 	public void setJavaMaxVersion(String javaMaxVersion) {
 		this.javaMaxVersion = javaMaxVersion;
-	}
-	public String getDownloadUrl() {
-		return downloadUrl;
-	}
-	public void setDownloadUrl(String downloadUrl) {
-		this.downloadUrl = downloadUrl;
 	}
 	public String getJavaInitialHeap64() {
 		return javaInitialHeap64;
@@ -133,18 +110,6 @@ public class Props implements Serializable {
 	}
 	public void setCopyrightText(String copyrightText) {
 		this.copyrightText = copyrightText;
-	}
-	public String getJavaInitialHeap32() {
-		return javaInitialHeap32;
-	}
-	public void setJavaInitialHeap32(String javaInitialHeap32) {
-		this.javaInitialHeap32 = javaInitialHeap32;
-	}
-	public String getJavaMaxHeap32() {
-		return javaMaxHeap32;
-	}
-	public void setJavaMaxHeap32(String javaMaxHeap32) {
-		this.javaMaxHeap32 = javaMaxHeap32;
 	}
 	public String getJarFileName() {
 		return jarFileName;
